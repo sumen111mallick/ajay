@@ -16,6 +16,7 @@
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <router-link to="/home" class="navbar-item">Home</router-link>
+      <router-link to="/vendor" class="navbar-item">Vendor</router-link>
       <router-link to="/profile" class="navbar-item">Profile</router-link>
        
 
