@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VendorRequest;
 use App\Vendor;
 use Illuminate\Http\Request;
+
 
 class VendorController extends Controller
 {
@@ -33,15 +35,23 @@ class VendorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function vendorList()
     {
+        return Vendor::latest()->get();
+    } 
+
+    public function store(VendorRequest $request)
+    {
+        
         $vendor = new Vendor;
-        $vendor->vendor_name = $request->vendorName;
-        $vendor->vendor_code = $request->vendorCode;
+        $vendor->vendor_name = $request->vendor_name;
+        $vendor->vendor_code = $request->vendor_code;
         $vendor->status = $request->status;
         
         $vendor->save();
-        return $request->all();
+        return $vendor;
+        
     }
 
     /**
@@ -73,9 +83,15 @@ class VendorController extends Controller
      * @param  \App\Vendor  $vendor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vendor $vendor)
+    public function update(VendorRequest $request)
     {
-        //
+        $vendor = Vendor::find($request->id);
+        $vendor->vendor_name = $request->vendor_name;
+        $vendor->vendor_code = $request->vendor_code;
+        $vendor->status = $request->status;
+        
+        $vendor->save();
+        
     }
 
     /**

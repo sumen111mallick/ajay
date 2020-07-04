@@ -23,18 +23,20 @@
         <th><abbr title="Serial No.">S.No</abbr></th>
         <th>Vendor</th>
         <th><abbr title="Unique">Vendor Code</abbr></th>
-        <th>Action</th>
+        <th>Active</th>
+        <th></th>
         
       </tr>
     </thead>
   
     <tbody>
-      <tr>
-        <th>10</th>
-        <td><a href="https://en.wikipedia.org/wiki/Chelsea_F.C." title="Chelsea F.C.">Chelsea</a></td>
-        <td>38</td>
-        <td>12</td>
-        
+      <tr v-for="(item,key) in vendorList" :key="item.id">
+        <td>{{key+1}}</td>
+        <td>{{item.vendor_name}}</td>
+        <td>{{item.vendor_code}}</td>
+        <td v-if="item.status==1">Yes</td>
+        <td v-else>No</td>
+        <td><span class="tag is-info" @click="openupdateVendor(key)">Edit</span></td>
       </tr>
     
     </tbody>
@@ -42,17 +44,27 @@
     
   </nav>
   <Addvendor :openmodal='addActive' @closeModal='closeModal'></Addvendor>
+  <Updatevendor :openmodal='updateActive' @closeModal='closeModal' ></Updatevendor>
 </div>
 </template>
 
 <script>
 let Addvendor = require('./Addvendor.vue').default;
+let Updatevendor = require('./Updatevendor.vue').default;
 export default {
-  components:{Addvendor},
+  components:{Addvendor,Updatevendor},
   data(){
     return{
-    addActive: ''
+        addActive: '',
+        vendorList:{},
+        errors:{},
+        updateActive:''
     }
+  },
+  mounted(){
+         axios.post('/vendorlist')
+                .then((response)=>this.vendorList = response.data)
+                .catch((error)=>console.log(this.errors = error.response.data.errors));
   },
   methods:{
     openAddVendor(){
@@ -60,6 +72,11 @@ export default {
     },
     closeModal(){
       this.addActive ='';
+      this.updateActive ='';
+    },
+    openupdateVendor(key){
+      this.$children[1].list = this.vendorList[key];
+      this.updateActive = 'is-active';
     }
   }
 }
