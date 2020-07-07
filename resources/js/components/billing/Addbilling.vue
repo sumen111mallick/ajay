@@ -94,7 +94,7 @@ export default {
             cost_centre_no:'',
             status:'1',
             },
-            
+            vendor_name:'',
             vendorList:{},
             errors:{}
         }
@@ -103,6 +103,7 @@ export default {
     mounted(){
              axios.post('/vendorlist')
             .then((response)=>this.vendorList = response.data);
+            
     },
     methods:{
         close(){
@@ -134,10 +135,11 @@ export default {
         }
        
     },
-   watch:{
+   /*watch:{
         vendor_name:function (value) {
-        this.vendor_code = value
+        this.list.vendor_code = value
         }
-    }
+    }*/
+
 }
 </script>

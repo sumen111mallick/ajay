@@ -82,7 +82,7 @@
         </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" @click="save">Save changes</button>
+      <button class="button is-success" @click="update">Save changes</button>
       <button class="button" @click="close">Cancel</button>
     </footer>
   </div>
@@ -90,20 +90,12 @@
 </template>
 <script>
 export default {
+    props:['openModal'],
     data(){
         return{
-            list:{
-            vendor_code:'',
-            address:'',
-            project_name:'',
-            project_location:'',
-            state:'',
-            state_code:'',
-            gstin:'',
-            status:'1',
-            },
+            list:{},
             
-            vendorList:{},
+           
             errors:{}
         }
     },
@@ -121,21 +113,9 @@ export default {
             this.error={},
             this.$emit('closeModal')
         },
-        save(){
-            axios.post('/shipping',this.$data.list).then((response)=>{
-                this.close(),
-                //this.$parent.billingList.push(response.data),
-                this.list['vendor_code']='',
-                this.list['address']='',
-                this.list['project_name']='',
-                this.list['project_location']='',
-                this.list['state']='',
-                this.list['state_code']='',
-                this.list['gstin']='',
-                this.list['status']='1',
-                this.errors={}
-            })
-            .catch((error)=>console.log(this.errors = error.response.data.errors));
+        update(){
+             axios.patch(`/shipping/${this.list.id}`,this.$data.list).then((response)=>this.close())
+                .catch((error)=>console.log(this.errors = error.response.data.errors));  
         }
     },
     mounted(){

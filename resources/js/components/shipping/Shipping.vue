@@ -50,7 +50,7 @@
         
         <td v-if="item.status==1">Yes</td>
         <td v-else>No</td>
-        <td><span class="tag is-info" >Edit</span></td>
+        <td><span class="tag is-info" @click="openUpdate(key)">Edit</span></td>
       </tr>
     
     </tbody>
@@ -58,18 +58,21 @@
     
   </nav>
  <Addshipping :openModal='addActive' @closeModal='closeModal'></Addshipping>
+ <Updateshipping :openModal='updateActive' @closeModal='closeModal'></Updateshipping>
 </div>
 
 </template>
 <script>
 let Addshipping = require('./Addshipping.vue').default;
+let Updateshipping =require('./Updateshipping.vue').default;
 export default {
-    components:{ Addshipping },
+    components:{ Addshipping, Updateshipping },
     data(){
         return{
             shippingList:{},
             errors:{},
             addActive:'',
+            updateActive:''
         }
     },
     mounted(){
@@ -83,6 +86,14 @@ export default {
         },
         closeModal(){
             this.addActive = '';
+            this.updateActive = '';
+            axios.post('shippinglist')
+        .then((response)=>this.shippingList = response.data)
+        .catch((error)=>this.errors = error.response.data.errors);
+        },
+        openUpdate(key){
+          this.$children[1].list = this.shippingList[key];
+          this.updateActive= 'is-active';
         }
     }
 }
