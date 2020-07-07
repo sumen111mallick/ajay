@@ -20,6 +20,27 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+
+/***********************
+ Vendor
+ ***********************/
 Route::resource('vendor','VendorController');
 Route::post('vendorlist','VendorController@vendorList');
 
+/***********************
+ Billing
+ ***********************/
+Route::resource('billing','BillingController');
+Route::post('billinglist','BillingController@billingList');
+
+/***********************
+ Shipping
+ ***********************/
+Route::resource('shipping','ShippingController');
+Route::post('shippinglist','ShippingController@shippingList');
+
+/***********************
+ Vehicle
+ ***********************/
+Route::resource('vehicle','VehicleController');
+Route::post('vehiclelist','VehicleController@vehicleList');

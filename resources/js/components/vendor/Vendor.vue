@@ -3,7 +3,7 @@
     <nav class="panel">
     <p class="panel-heading">
       Vendors
-      <button class="button is-link is-outlined" @click="openAddVendor">
+      <button class="button is-link is-outlined is-pulled-right" @click="openAddVendor">
         Add New Vendor
       </button>
     </p>
@@ -64,7 +64,7 @@ export default {
   mounted(){
          axios.post('/vendorlist')
                 .then((response)=>this.vendorList = response.data)
-                .catch((error)=>console.log(this.errors = error.response.data.errors));
+                .catch((error)=>this.errors = error.response.data.errors);
   },
   methods:{
     openAddVendor(){

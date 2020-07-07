@@ -14,12 +14,18 @@ let Myfooter =  require('./components/Myfooter.vue').default;
 
 let Home =  require('./components/Home.vue').default;
 let Vendor =  require('./components/vendor/Vendor.vue').default;
+let BillingAddress =  require('./components/billing/Billing.vue').default;
+let ShippingAddress = require('./components/shipping/Shipping.vue').default;
+let Vehicle = require('./components/vehicle/Vehicle.vue').default;
 let Profile =  require('./components/Profile.vue').default;
 
 const routes = [
     { path: '/home', component: Home },
     { path: '/profile', component: Profile },
-    { path: '/vendor', component: Vendor}
+    { path: '/vendor', component: Vendor},
+    { path: '/billingaddress', component: BillingAddress},
+    { path: '/shippingaddress', component: ShippingAddress},
+    { path: '/vehicle', component: Vehicle}
   ]
 
   const router = new VueRouter({
