@@ -47,39 +47,54 @@
         
         <td v-if="item.status==1">Yes</td>
         <td v-else>No</td>
-        <td><span class="tag is-info" >Edit</span></td>
+        <td><span class="tag is-info" @click="openUpdate(key)" >Edit</span></td>
       </tr>
     
     </tbody>
   </table>
     
   </nav>
- <Addbilling :openModal='addActive' @closeModal='closeModal'></Addbilling>
+ <Addbilling :openModal='addActive'  @closeModal='closeModal'></Addbilling>
+ <Updatebilling :openModal='updateActive' @closeModal='closeModal'></Updatebilling>
 </div>
 
 </template>
 <script>
 let Addbilling = require('./Addbilling.vue').default;
+let Updatebilling = require('./Updatebilling.vue').default;
 export default {
-    components:{ Addbilling },
+    components:{ Addbilling,Updatebilling },
     data(){
         return{
             billingList:{},
             errors:{},
             addActive:'',
+            updateActive:''
         }
     },
     mounted(){
+      
         axios.post('billinglist')
         .then((response)=>this.billingList = response.data)
         .catch((error)=>this.errors = error.response.data.errors);
+       
     },
     methods:{
         openAddModal(){
             this.addActive = 'is-active';
+            
         },
         closeModal(){
             this.addActive = '';
+            this.updateActive = '';
+             axios.post('billinglist')
+        .then((response)=>this.billingList = response.data)
+        .catch((error)=>this.errors = error.response.data.errors);
+        },
+        
+        openUpdate(key){
+          this.$children[1].list = this.billingList[key];
+          this.updateActive = 'is-active';
         }
     }
 }

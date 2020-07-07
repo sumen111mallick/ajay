@@ -75,7 +75,7 @@
         </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" @click="save">Save changes</button>
+      <button class="button is-success" @click="update">Save changes</button>
       <button class="button" @click="close">Cancel</button>
     </footer>
   </div>
@@ -83,60 +83,25 @@
 </template>
 <script>
 export default {
+    props:['openModal'],
     data(){
         return{
-            list:{
-            vendor_code:'',
-            address:'',
-            state:'',
-            state_code:'',
-            gstin:'',
-            cost_centre_no:'',
-            status:'1',
-            },
-            
-            vendorList:{},
+             list:{},
+            billingList:{},
             errors:{}
         }
     },
-    props:['openModal'],
     mounted(){
-             axios.post('/vendorlist')
+            axios.post('/vendorlist')
             .then((response)=>this.vendorList = response.data);
     },
     methods:{
         close(){
-            
-            this.list['vendor_code']='',
-            this.list['address']='',
-            this.list['state']='',
-            this.list['state_code']='',
-            this.list['gstin']='',
-            this.list['cost_centre_no']='',
-            this.list['status']='1',
-            this.error={},
             this.$emit('closeModal')
         },
-        save(){
-            axios.post('/billing',this.$data.list).then((response)=>{
-                this.close(),
-                //this.$parent.billingList.push(response.data),
-                this.list['vendor_code']='',
-                this.list['address']='',
-                this.list['state']='',
-                this.list['state_code']='',
-                this.list['gstin']='',
-                this.list['cost_centre_no']='',
-                this.list['status']='1',
-                this.errors={}
-            })
-            .catch((error)=>console.log(this.errors = error.response.data.errors));
-        }
-       
-    },
-   watch:{
-        vendor_name:function (value) {
-        this.vendor_code = value
+        update(){
+            axios.patch(`/billing/${this.list.id}`,this.$data.list).then((response)=>this.close())
+                .catch((error)=>console.log(this.errors = error.response.data.errors));   
         }
     }
 }

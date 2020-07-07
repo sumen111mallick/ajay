@@ -56,6 +56,9 @@ export default {
     },
     methods:{
         close(){
+            this.list['vendor_name']='',
+            this.list['vendor_code']='',
+            this.list['status']='1',
             this.$emit('closeModal')
         },
         save(){

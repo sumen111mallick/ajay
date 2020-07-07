@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BillingRequest;
 use App\Billing;
 use Illuminate\Http\Request;
 
@@ -33,9 +34,20 @@ class BillingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BillingRequest $request)
     {
-        //
+        $billing = new Billing;
+        $billing->vendor_code = $request->vendor_code;
+        $billing->address = $request->address;
+        $billing->state = $request->state;
+        $billing->state_code = $request->state_code;
+        $billing->gstin = $request->gstin;
+        $billing->cost_centre_no = $request->cost_centre_no;
+        $billing->status = $request->status;
+        $billing->save();
+        //dd($billing::with('vendor')->get());
+        return $billing;
+        //return $request->all();
     }
 
     /**
@@ -67,9 +79,18 @@ class BillingController extends Controller
      * @param  \App\Billing  $billing
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Billing $billing)
+    public function update(BillingRequest $request)
     {
-        //
+        $billing = Billing::find($request->id);
+        $billing->vendor_code = $request->vendor_code;
+        $billing->address = $request->address;
+        $billing->state = $request->state;
+        $billing->state_code = $request->state_code;
+        $billing->gstin = $request->gstin;
+        $billing->cost_centre_no = $request->cost_centre_no;
+        $billing->status = $request->status;
+        $billing->save();
+       
     }
 
     /**

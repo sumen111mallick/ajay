@@ -1980,11 +1980,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      list: {
+        vendor_code: '',
+        address: '',
+        state: '',
+        state_code: '',
+        gstin: '',
+        cost_centre_no: '',
+        status: '1'
+      },
+      vendorList: {},
+      errors: {}
+    };
+  },
   props: ['openModal'],
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.post('/vendorlist').then(function (response) {
+      return _this.vendorList = response.data;
+    });
+  },
   methods: {
     close: function close() {
-      this.$emit('closeModal');
+      this.list['vendor_code'] = '', this.list['address'] = '', this.list['state'] = '', this.list['state_code'] = '', this.list['gstin'] = '', this.list['cost_centre_no'] = '', this.list['status'] = '1', this.error = {}, this.$emit('closeModal');
+    },
+    save: function save() {
+      var _this2 = this;
+
+      axios.post('/billing', this.$data.list).then(function (response) {
+        _this2.close(), //this.$parent.billingList.push(response.data),
+        _this2.list['vendor_code'] = '', _this2.list['address'] = '', _this2.list['state'] = '', _this2.list['state_code'] = '', _this2.list['gstin'] = '', _this2.list['cost_centre_no'] = '', _this2.list['status'] = '1', _this2.errors = {};
+      })["catch"](function (error) {
+        return console.log(_this2.errors = error.response.data.errors);
+      });
+    }
+  },
+  watch: {
+    vendor_name: function vendor_name(value) {
+      this.vendor_code = value;
     }
   }
 });
@@ -2060,17 +2108,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var Addbilling = __webpack_require__(/*! ./Addbilling.vue */ "./resources/js/components/billing/Addbilling.vue")["default"];
+
+var Updatebilling = __webpack_require__(/*! ./Updatebilling.vue */ "./resources/js/components/billing/Updatebilling.vue")["default"];
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Addbilling: Addbilling
+    Addbilling: Addbilling,
+    Updatebilling: Updatebilling
   },
   data: function data() {
     return {
       billingList: {},
       errors: {},
-      addActive: ''
+      addActive: '',
+      updateActive: ''
     };
   },
   mounted: function mounted() {
@@ -2087,7 +2140,145 @@ var Addbilling = __webpack_require__(/*! ./Addbilling.vue */ "./resources/js/com
       this.addActive = 'is-active';
     },
     closeModal: function closeModal() {
+      var _this2 = this;
+
       this.addActive = '';
+      this.updateActive = '';
+      axios.post('billinglist').then(function (response) {
+        return _this2.billingList = response.data;
+      })["catch"](function (error) {
+        return _this2.errors = error.response.data.errors;
+      });
+    },
+    openUpdate: function openUpdate(key) {
+      this.$children[1].list = this.billingList[key];
+      this.updateActive = 'is-active';
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/billing/Updatebilling.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/billing/Updatebilling.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['openModal'],
+  data: function data() {
+    return {
+      list: {},
+      billingList: {},
+      errors: {}
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.post('/vendorlist').then(function (response) {
+      return _this.vendorList = response.data;
+    });
+  },
+  methods: {
+    close: function close() {
+      this.$emit('closeModal');
+    },
+    update: function update() {
+      var _this2 = this;
+
+      axios.patch("/billing/".concat(this.list.id), this.$data.list).then(function (response) {
+        return _this2.close();
+      })["catch"](function (error) {
+        return console.log(_this2.errors = error.response.data.errors);
+      });
     }
   }
 });
@@ -2533,7 +2724,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     close: function close() {
-      this.$emit('closeModal');
+      this.list['vendor_name'] = '', this.list['vendor_code'] = '', this.list['status'] = '1', this.$emit('closeModal');
     },
     save: function save() {
       var _this = this;
@@ -34209,12 +34400,330 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _vm._m(0),
+      _c("section", { staticClass: "modal-card-body" }, [
+        _vm._v("\n        Vendor Name\n        "),
+        _c("div", { staticClass: "field" }, [
+          _c("div", { staticClass: "select is-info is-fullwidth" }, [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.list.vendor_code,
+                    expression: "list.vendor_code"
+                  }
+                ],
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.list,
+                      "vendor_code",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Vendor")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.vendorList, function(vendor) {
+                  return _c(
+                    "option",
+                    {
+                      key: vendor.vendor_code,
+                      domProps: { value: vendor.vendor_code }
+                    },
+                    [_vm._v(_vm._s(vendor.vendor_name))]
+                  )
+                })
+              ],
+              2
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            Vendor Code\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.vendor_code,
+                  expression: "list.vendor_code"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.vendor_code },
+              attrs: { type: "text", placeholder: "Vendor Code", disabled: "" },
+              domProps: { value: _vm.list.vendor_code },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "vendor_code", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.vendor_code
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.vendor_code[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            Address\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.address,
+                  expression: "list.address"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.address },
+              attrs: { type: "text", placeholder: "Address" },
+              domProps: { value: _vm.list.address },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "address", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.address
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.address[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            State\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.state,
+                  expression: "list.state"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.state },
+              attrs: { type: "text", placeholder: "State" },
+              domProps: { value: _vm.list.state },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "state", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.state
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.state[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            State Code\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.state_code,
+                  expression: "list.state_code"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.state_code },
+              attrs: { type: "text", placeholder: "State Code" },
+              domProps: { value: _vm.list.state_code },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "state_code", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.state_code
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.state_code[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            GSTIN\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.gstin,
+                  expression: "list.gstin"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.gstin },
+              attrs: { type: "text", placeholder: "GSTIN" },
+              domProps: { value: _vm.list.gstin },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "gstin", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.gstin
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.gstin[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            Cost Centre No\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.cost_centre_no,
+                  expression: "list.cost_centre_no"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.cost_centre_no },
+              attrs: { type: "text", placeholder: "Cost Centre No" },
+              domProps: { value: _vm.list.cost_centre_no },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "cost_centre_no", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.cost_centre_no
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.cost_centre_no[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c(
+              "div",
+              {
+                staticClass: "select is-info",
+                class: { "is-danger": _vm.errors.status }
+              },
+              [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.status,
+                        expression: "list.status"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.list,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [_vm._v("Yes")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.errors.status
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.status[0]))
+              ])
+            : _vm._e()
+        ])
+      ]),
       _vm._v(" "),
       _c("footer", { staticClass: "modal-card-foot" }, [
-        _c("button", { staticClass: "button is-success" }, [
-          _vm._v("Save changes")
-        ]),
+        _c(
+          "button",
+          { staticClass: "button is-success", on: { click: _vm.save } },
+          [_vm._v("Save changes")]
+        ),
         _vm._v(" "),
         _c("button", { staticClass: "button", on: { click: _vm.close } }, [
           _vm._v("Cancel")
@@ -34228,87 +34737,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "modal-card-body" }, [
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "Vendor Name" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "Vendor Code" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("small", { staticClass: "has-text-danger" }, [_vm._v("test")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "Address" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "State" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "State Code" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "GSTIN" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "Cost Centre No" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("label", { staticClass: "label" }, [_vm._v("Active")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "control" }, [
-          _c("div", { staticClass: "select is-info" }, [
-            _c("select", [
-              _c("option", { attrs: { value: "1" } }, [_vm._v("Yes")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "control" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Active")])
     ])
   }
 ]
@@ -34378,7 +34808,20 @@ var render = function() {
                   ? _c("td", [_vm._v("Yes")])
                   : _c("td", [_vm._v("No")]),
                 _vm._v(" "),
-                _vm._m(2, true)
+                _c("td", [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "tag is-info",
+                      on: {
+                        click: function($event) {
+                          return _vm.openUpdate(key)
+                        }
+                      }
+                    },
+                    [_vm._v("Edit")]
+                  )
+                ])
               ])
             }),
             0
@@ -34388,6 +34831,11 @@ var render = function() {
       _vm._v(" "),
       _c("Addbilling", {
         attrs: { openModal: _vm.addActive },
+        on: { closeModal: _vm.closeModal }
+      }),
+      _vm._v(" "),
+      _c("Updatebilling", {
+        attrs: { openModal: _vm.updateActive },
         on: { closeModal: _vm.closeModal }
       })
     ],
@@ -34444,13 +34892,384 @@ var staticRenderFns = [
         _c("th")
       ])
     ])
-  },
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/billing/Updatebilling.vue?vue&type=template&id=0a946eba&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/billing/Updatebilling.vue?vue&type=template&id=0a946eba& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "modal", class: _vm.openModal }, [
+    _c("div", { staticClass: "modal-background" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal-card" }, [
+      _c("header", { staticClass: "modal-card-head" }, [
+        _c("p", { staticClass: "modal-card-title" }, [
+          _vm._v("Add New Billing Address")
+        ]),
+        _vm._v(" "),
+        _c("button", {
+          staticClass: "delete",
+          attrs: { "aria-label": "close" },
+          on: { click: _vm.close }
+        })
+      ]),
+      _vm._v(" "),
+      _c("section", { staticClass: "modal-card-body" }, [
+        _vm._v("\n        Vendor Name\n        "),
+        _c("div", { staticClass: "field" }, [
+          _c("div", { staticClass: "select is-info is-fullwidth" }, [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.list.vendor_code,
+                    expression: "list.vendor_code"
+                  }
+                ],
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.list,
+                      "vendor_code",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Vendor")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.vendorList, function(vendor) {
+                  return _c(
+                    "option",
+                    {
+                      key: vendor.vendor_code,
+                      domProps: { value: vendor.vendor_code }
+                    },
+                    [_vm._v(_vm._s(vendor.vendor_name))]
+                  )
+                })
+              ],
+              2
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            Vendor Code\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.vendor_code,
+                  expression: "list.vendor_code"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.vendor_code },
+              attrs: { type: "text", placeholder: "Vendor Code", disabled: "" },
+              domProps: { value: _vm.list.vendor_code },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "vendor_code", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.vendor_code
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.vendor_code[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            Address\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.address,
+                  expression: "list.address"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.address },
+              attrs: { type: "text", placeholder: "Address" },
+              domProps: { value: _vm.list.address },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "address", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.address
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.address[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            State\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.state,
+                  expression: "list.state"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.state },
+              attrs: { type: "text", placeholder: "State" },
+              domProps: { value: _vm.list.state },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "state", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.state
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.state[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            State Code\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.state_code,
+                  expression: "list.state_code"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.state_code },
+              attrs: { type: "text", placeholder: "State Code" },
+              domProps: { value: _vm.list.state_code },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "state_code", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.state_code
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.state_code[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            GSTIN\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.gstin,
+                  expression: "list.gstin"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.gstin },
+              attrs: { type: "text", placeholder: "GSTIN" },
+              domProps: { value: _vm.list.gstin },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "gstin", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.gstin
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.gstin[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._v("\n            Cost Centre No\n            "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.cost_centre_no,
+                  expression: "list.cost_centre_no"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.cost_centre_no },
+              attrs: { type: "text", placeholder: "Cost Centre No" },
+              domProps: { value: _vm.list.cost_centre_no },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "cost_centre_no", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.cost_centre_no
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.cost_centre_no[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c(
+              "div",
+              {
+                staticClass: "select is-info",
+                class: { "is-danger": _vm.errors.status }
+              },
+              [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.status,
+                        expression: "list.status"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.list,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [_vm._v("Yes")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.errors.status
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.status[0]))
+              ])
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("footer", { staticClass: "modal-card-foot" }, [
+        _c(
+          "button",
+          { staticClass: "button is-success", on: { click: _vm.update } },
+          [_vm._v("Save changes")]
+        ),
+        _vm._v(" "),
+        _c("button", { staticClass: "button", on: { click: _vm.close } }, [
+          _vm._v("Cancel")
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("span", { staticClass: "tag is-info" }, [_vm._v("Edit")])
+    return _c("div", { staticClass: "control" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Active")])
     ])
   }
 ]
@@ -51095,6 +51914,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Billing_vue_vue_type_template_id_bae61068___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Billing_vue_vue_type_template_id_bae61068___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/billing/Updatebilling.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/billing/Updatebilling.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Updatebilling_vue_vue_type_template_id_0a946eba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Updatebilling.vue?vue&type=template&id=0a946eba& */ "./resources/js/components/billing/Updatebilling.vue?vue&type=template&id=0a946eba&");
+/* harmony import */ var _Updatebilling_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Updatebilling.vue?vue&type=script&lang=js& */ "./resources/js/components/billing/Updatebilling.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Updatebilling_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Updatebilling_vue_vue_type_template_id_0a946eba___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Updatebilling_vue_vue_type_template_id_0a946eba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/billing/Updatebilling.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/billing/Updatebilling.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/billing/Updatebilling.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatebilling_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Updatebilling.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/billing/Updatebilling.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatebilling_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/billing/Updatebilling.vue?vue&type=template&id=0a946eba&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/billing/Updatebilling.vue?vue&type=template&id=0a946eba& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatebilling_vue_vue_type_template_id_0a946eba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Updatebilling.vue?vue&type=template&id=0a946eba& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/billing/Updatebilling.vue?vue&type=template&id=0a946eba&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatebilling_vue_vue_type_template_id_0a946eba___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatebilling_vue_vue_type_template_id_0a946eba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
