@@ -17,11 +17,11 @@ let Vendor =  require('./components/vendor/Vendor.vue').default;
 let BillingAddress =  require('./components/billing/Billing.vue').default;
 let ShippingAddress = require('./components/shipping/Shipping.vue').default;
 let Vehicle = require('./components/vehicle/Vehicle.vue').default;
-let Profile =  require('./components/Profile.vue').default;
+let Personal =  require('./components/Personal.vue').default;
 
 const routes = [
     { path: '/home', component: Home },
-    { path: '/profile', component: Profile },
+    { path: '/personal', component: Personal },
     { path: '/vendor', component: Vendor},
     { path: '/billingaddress', component: BillingAddress},
     { path: '/shippingaddress', component: ShippingAddress},

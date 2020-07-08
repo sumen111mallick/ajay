@@ -2,7 +2,7 @@
     <div>
     <nav class="panel">
     <p class="panel-heading">
-      Billing Address
+      Shipping Address
       <button class="button is-link is-outlined is-pulled-right" @click="openAddModal">
         Add New Shipping Address
       </button>

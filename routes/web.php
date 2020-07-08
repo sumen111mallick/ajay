@@ -44,3 +44,9 @@ Route::post('shippinglist','ShippingController@shippingList');
  ***********************/
 Route::resource('vehicle','VehicleController');
 Route::post('vehiclelist','VehicleController@vehicleList');
+
+/***********************
+ personal detail
+ ***********************/
+Route::resource('personal','PersonalController');
+Route::post('personaldetail','PersonalController@personalDetail');
