@@ -37,7 +37,7 @@
         
         <td v-if="item.status==1">Yes</td>
         <td v-else>No</td>
-        <td><span class="tag is-info" >Edit</span></td>
+        <td><span class="tag is-info" @click="openUpdate(key)" >Edit</span></td>
       </tr>
     
     </tbody>
@@ -45,18 +45,21 @@
     
   </nav>
  <Addvehicle :openModal='addActive' @closeModal='closeModal'></Addvehicle>
+ <Updatevehicle :openModal='updateActive' @closeModal='closeModal'></Updatevehicle>
 </div>
 
 </template>
 <script>
 let Addvehicle = require('./Addvehicle.vue').default;
+let Updatevehicle = require('./Updatevehicle.vue').default;
 export default {
-    components:{ Addvehicle },
+    components:{ Addvehicle,Updatevehicle },
     data(){
         return{
             vehicleList:{},
             errors:{},
             addActive:'',
+            updateActive:''
         }
     },
     mounted(){
@@ -66,10 +69,18 @@ export default {
     },
     methods:{
         openAddModal(){
-            this.addActive = 'is-active';
+            this.addActive = 'is-active'
         },
         closeModal(){
-            this.addActive = '';
+            this.addActive = '',
+            this.updateActive = '',
+            axios.post('vehiclelist')
+          .then((response)=>this.vehicleList = response.data)
+          .catch((error)=>this.errors = error.response.data.errors);
+        },
+        openUpdate(key){
+          this.$children[1].list = this.vehicleList[key],
+          this.updateActive = 'is-active';
         }
     }
 }

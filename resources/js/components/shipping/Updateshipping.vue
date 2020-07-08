@@ -99,7 +99,7 @@ export default {
             errors:{}
         }
     },
-    props:['openModal'],
+    
     methods:{
         close(){
            this.list['vendor_code']='',
@@ -114,7 +114,9 @@ export default {
             this.$emit('closeModal')
         },
         update(){
-             axios.patch(`/shipping/${this.list.id}`,this.$data.list).then((response)=>this.close())
+             axios.patch(`/shipping/${this.list.id}`,this.$data.list).then((response)=>{
+                 this.errors={},
+                 this.close()})
                 .catch((error)=>console.log(this.errors = error.response.data.errors));  
         }
     },

@@ -2277,7 +2277,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.patch("/billing/".concat(this.list.id), this.$data.list).then(function (response) {
-        return _this2.close();
+        _this2.errors = {}, _this2.close();
       })["catch"](function (error) {
         return console.log(_this2.errors = error.response.data.errors);
       });
@@ -2562,10 +2562,6 @@ var Updateshipping = __webpack_require__(/*! ./Updateshipping.vue */ "./resource
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var _props$data$props$met;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -2656,34 +2652,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = (_props$data$props$met = {
+/* harmony default export */ __webpack_exports__["default"] = ({
   props: ['openModal'],
   data: function data() {
     return {
       list: {},
       errors: {}
     };
-  }
-}, _defineProperty(_props$data$props$met, "props", ['openModal']), _defineProperty(_props$data$props$met, "methods", {
-  close: function close() {
-    this.list['vendor_code'] = '', this.list['address'] = '', this.list['project_name'] = '', this.list['project_location'] = '', this.list['state'] = '', this.list['state_code'] = '', this.list['gstin'] = '', this.list['status'] = '1', this.error = {}, this.$emit('closeModal');
   },
-  update: function update() {
-    var _this = this;
+  methods: {
+    close: function close() {
+      this.list['vendor_code'] = '', this.list['address'] = '', this.list['project_name'] = '', this.list['project_location'] = '', this.list['state'] = '', this.list['state_code'] = '', this.list['gstin'] = '', this.list['status'] = '1', this.error = {}, this.$emit('closeModal');
+    },
+    update: function update() {
+      var _this = this;
 
-    axios.patch("/shipping/".concat(this.list.id), this.$data.list).then(function (response) {
-      return _this.close();
-    })["catch"](function (error) {
-      return console.log(_this.errors = error.response.data.errors);
+      axios.patch("/shipping/".concat(this.list.id), this.$data.list).then(function (response) {
+        _this.errors = {}, _this.close();
+      })["catch"](function (error) {
+        return console.log(_this.errors = error.response.data.errors);
+      });
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    axios.post('/vendorlist').then(function (response) {
+      return _this2.vendorList = response.data;
     });
   }
-}), _defineProperty(_props$data$props$met, "mounted", function mounted() {
-  var _this2 = this;
-
-  axios.post('/vendorlist').then(function (response) {
-    return _this2.vendorList = response.data;
-  });
-}), _props$data$props$met);
+});
 
 /***/ }),
 
@@ -2746,9 +2744,119 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['openModal'],
+  data: function data() {
+    return {
+      list: {
+        type: '',
+        vehicle_no: '',
+        status: '1'
+      },
+      errors: {}
+    };
+  },
   methods: {
+    close: function close() {
+      this.list.type = '', this.list.vehicle_no = '', this.list.status = '1', this.errors = {}, this.$emit('closeModal');
+    },
+    save: function save() {
+      var _this = this;
+
+      axios.post('/vehicle', this.$data.list).then(function (response) {
+        _this.close(), _this.list.type = '', _this.list.vehicle_no = '', _this.list.status = '1', _this.errors = {};
+      })["catch"](function (error) {
+        return console.log(_this.$data.errors = error.response.data.errors);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/vehicle/Updatevehicle.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/vehicle/Updatevehicle.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['openModal'],
+  data: function data() {
+    return {
+      list: {},
+      errors: {}
+    };
+  },
+  methods: {
+    update: function update() {
+      var _this = this;
+
+      axios.patch("/vehicle/".concat(this.list.id), this.$data.list).then(function (response) {
+        _this.errors = {}, _this.close();
+      })["catch"](function (error) {
+        return console.log(_this.errors = error.response.data.errors);
+      });
+    },
     close: function close() {
       this.$emit('closeModal');
     }
@@ -2816,17 +2924,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var Addvehicle = __webpack_require__(/*! ./Addvehicle.vue */ "./resources/js/components/vehicle/Addvehicle.vue")["default"];
+
+var Updatevehicle = __webpack_require__(/*! ./Updatevehicle.vue */ "./resources/js/components/vehicle/Updatevehicle.vue")["default"];
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Addvehicle: Addvehicle
+    Addvehicle: Addvehicle,
+    Updatevehicle: Updatevehicle
   },
   data: function data() {
     return {
       vehicleList: {},
       errors: {},
-      addActive: ''
+      addActive: '',
+      updateActive: ''
     };
   },
   mounted: function mounted() {
@@ -2843,7 +2956,16 @@ var Addvehicle = __webpack_require__(/*! ./Addvehicle.vue */ "./resources/js/com
       this.addActive = 'is-active';
     },
     closeModal: function closeModal() {
-      this.addActive = '';
+      var _this2 = this;
+
+      this.addActive = '', this.updateActive = '', axios.post('vehiclelist').then(function (response) {
+        return _this2.vehicleList = response.data;
+      })["catch"](function (error) {
+        return _this2.errors = error.response.data.errors;
+      });
+    },
+    openUpdate: function openUpdate(key) {
+      this.$children[1].list = this.vehicleList[key], this.updateActive = 'is-active';
     }
   }
 });
@@ -36484,12 +36606,165 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _vm._m(0),
+      _c("section", { staticClass: "modal-card-body" }, [
+        _c("div", { staticClass: "field" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c(
+              "div",
+              {
+                staticClass: "select is-info",
+                class: { "is-danger": _vm.errors.type }
+              },
+              [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.type,
+                        expression: "list.type"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.list,
+                          "type",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "Tampo" } }, [
+                      _vm._v("Tampo")
+                    ])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.errors.type
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.type[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.vehicle_no,
+                  expression: "list.vehicle_no"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.vehicle_no },
+              attrs: { type: "text", placeholder: "Vehicle No" },
+              domProps: { value: _vm.list.vehicle_no },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "vehicle_no", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.vehicle_no
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.vehicle_no[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c(
+              "div",
+              {
+                staticClass: "select is-info",
+                class: { "is-danger": _vm.errors.status }
+              },
+              [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.status,
+                        expression: "list.status"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.list,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [_vm._v("Yes")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.errors.status
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.status[0]))
+              ])
+            : _vm._e()
+        ])
+      ]),
       _vm._v(" "),
       _c("footer", { staticClass: "modal-card-foot" }, [
-        _c("button", { staticClass: "button is-success" }, [
-          _vm._v("Save changes")
-        ]),
+        _c(
+          "button",
+          { staticClass: "button is-success", on: { click: _vm.save } },
+          [_vm._v("Save changes")]
+        ),
         _vm._v(" "),
         _c("button", { staticClass: "button", on: { click: _vm.close } }, [
           _vm._v("Cancel")
@@ -36503,45 +36778,238 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "modal-card-body" }, [
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("label", { staticClass: "label" }, [_vm._v("Vehicle Type")])
+    return _c("div", { staticClass: "control" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Vehicle Type")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Active")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/vehicle/Updatevehicle.vue?vue&type=template&id=19f11176&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/vehicle/Updatevehicle.vue?vue&type=template&id=19f11176& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "modal", class: _vm.openModal }, [
+    _c("div", { staticClass: "modal-background" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal-card" }, [
+      _c("header", { staticClass: "modal-card-head" }, [
+        _c("p", { staticClass: "modal-card-title" }, [
+          _vm._v("Add New Vehicle")
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "control" }, [
-          _c("div", { staticClass: "select is-info" }, [
-            _c("select", [
-              _c("option", { attrs: { value: "Tampo" } }, [_vm._v("Tampo")])
-            ])
-          ])
+        _c("button", {
+          staticClass: "delete",
+          attrs: { "aria-label": "close" },
+          on: { click: _vm.close }
+        })
+      ]),
+      _vm._v(" "),
+      _c("section", { staticClass: "modal-card-body" }, [
+        _c("div", { staticClass: "field" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c(
+              "div",
+              {
+                staticClass: "select is-info",
+                class: { "is-danger": _vm.errors.type }
+              },
+              [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.type,
+                        expression: "list.type"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.list,
+                          "type",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "Tampo" } }, [
+                      _vm._v("Tampo")
+                    ])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.errors.type
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.type[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.list.vehicle_no,
+                  expression: "list.vehicle_no"
+                }
+              ],
+              staticClass: "input is-info",
+              class: { "is-danger": _vm.errors.vehicle_no },
+              attrs: { type: "text", placeholder: "Vehicle No" },
+              domProps: { value: _vm.list.vehicle_no },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "vehicle_no", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.errors.vehicle_no
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.vehicle_no[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c(
+              "div",
+              {
+                staticClass: "select is-info",
+                class: { "is-danger": _vm.errors.status }
+              },
+              [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.status,
+                        expression: "list.status"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.list,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [_vm._v("Yes")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.errors.status
+            ? _c("small", { staticClass: "has-text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.status[0]))
+              ])
+            : _vm._e()
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input is-info",
-            attrs: { type: "text", placeholder: "Vehicle No" }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("label", { staticClass: "label" }, [_vm._v("Active")])
-        ]),
+      _c("footer", { staticClass: "modal-card-foot" }, [
+        _c(
+          "button",
+          { staticClass: "button is-success", on: { click: _vm.update } },
+          [_vm._v("Save changes")]
+        ),
         _vm._v(" "),
-        _c("div", { staticClass: "control" }, [
-          _c("div", { staticClass: "select is-info" }, [
-            _c("select", [
-              _c("option", { attrs: { value: "1" } }, [_vm._v("Yes")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
-            ])
-          ])
+        _c("button", { staticClass: "button", on: { click: _vm.close } }, [
+          _vm._v("Cancel")
         ])
       ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Vehicle Type")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Active")])
     ])
   }
 ]
@@ -36601,7 +37069,20 @@ var render = function() {
                   ? _c("td", [_vm._v("Yes")])
                   : _c("td", [_vm._v("No")]),
                 _vm._v(" "),
-                _vm._m(2, true)
+                _c("td", [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "tag is-info",
+                      on: {
+                        click: function($event) {
+                          return _vm.openUpdate(key)
+                        }
+                      }
+                    },
+                    [_vm._v("Edit")]
+                  )
+                ])
               ])
             }),
             0
@@ -36611,6 +37092,11 @@ var render = function() {
       _vm._v(" "),
       _c("Addvehicle", {
         attrs: { openModal: _vm.addActive },
+        on: { closeModal: _vm.closeModal }
+      }),
+      _vm._v(" "),
+      _c("Updatevehicle", {
+        attrs: { openModal: _vm.updateActive },
         on: { closeModal: _vm.closeModal }
       })
     ],
@@ -36656,14 +37142,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th")
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("span", { staticClass: "tag is-info" }, [_vm._v("Edit")])
     ])
   }
 ]
@@ -53127,6 +53605,76 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Addvehicle_vue_vue_type_template_id_2a543e4e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Addvehicle_vue_vue_type_template_id_2a543e4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/vehicle/Updatevehicle.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/vehicle/Updatevehicle.vue ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Updatevehicle_vue_vue_type_template_id_19f11176___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Updatevehicle.vue?vue&type=template&id=19f11176& */ "./resources/js/components/vehicle/Updatevehicle.vue?vue&type=template&id=19f11176&");
+/* harmony import */ var _Updatevehicle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Updatevehicle.vue?vue&type=script&lang=js& */ "./resources/js/components/vehicle/Updatevehicle.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Updatevehicle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Updatevehicle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Updatevehicle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Updatevehicle_vue_vue_type_template_id_19f11176___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Updatevehicle_vue_vue_type_template_id_19f11176___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/vehicle/Updatevehicle.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/vehicle/Updatevehicle.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/vehicle/Updatevehicle.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatevehicle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Updatevehicle.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/vehicle/Updatevehicle.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatevehicle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/vehicle/Updatevehicle.vue?vue&type=template&id=19f11176&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/vehicle/Updatevehicle.vue?vue&type=template&id=19f11176& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatevehicle_vue_vue_type_template_id_19f11176___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Updatevehicle.vue?vue&type=template&id=19f11176& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/vehicle/Updatevehicle.vue?vue&type=template&id=19f11176&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatevehicle_vue_vue_type_template_id_19f11176___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Updatevehicle_vue_vue_type_template_id_19f11176___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

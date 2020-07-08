@@ -17,6 +17,7 @@ class CreateVehiclesTable extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->string('vehicle_no')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

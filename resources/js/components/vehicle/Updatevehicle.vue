@@ -45,7 +45,7 @@
         </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" @click="save">Save changes</button>
+      <button class="button is-success" @click="update">Save changes</button>
       <button class="button" @click="close">Cancel</button>
     </footer>
   </div>
@@ -56,32 +56,20 @@ export default {
     props:['openModal'],
     data(){
         return{
-            list:{
-                type:'',
-                vehicle_no:'',
-                status:'1'
-            },
+            list:{},
             errors:{}
         }
     },
     methods:{
-        close(){
-            this.list.type='',
-            this.list.vehicle_no='',
-            this.list.status='1',
-            this.errors={},
-            this.$emit('closeModal')
-        },
-        save(){
-            axios.post('/vehicle',this.$data.list)
+        update(){
+            axios.patch(`/vehicle/${this.list.id}`,this.$data.list)
             .then((response)=>{
-                this.close(),
-                this.list.type='',
-                this.list.vehicle_no='',
-                this.list.status='1',
-                this.errors={}
-            })
-            .catch((error)=>console.log(this.$data.errors=error.response.data.errors));
+                this.errors={},
+                this.close()})
+            .catch((error)=>console.log(this.errors = error.response.data.errors))
+        },
+        close(){
+            this.$emit('closeModal')
         }
     }
 }
