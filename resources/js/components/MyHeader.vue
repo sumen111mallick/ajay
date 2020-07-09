@@ -20,6 +20,7 @@
       <router-link to="/billingaddress" class="navbar-item">Manage Billing Address</router-link>
       <router-link to="/shippingaddress" class="navbar-item">Manage Shipping Address</router-link>
       <router-link to="/vehicle" class="navbar-item">Manage Transportation</router-link>
+      <router-link to="/item" class="navbar-item">Manage Item</router-link>
       <router-link to="/personal" class="navbar-item">Personal Detail</router-link>
        
 

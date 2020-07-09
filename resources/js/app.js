@@ -17,6 +17,7 @@ let Vendor =  require('./components/vendor/Vendor.vue').default;
 let BillingAddress =  require('./components/billing/Billing.vue').default;
 let ShippingAddress = require('./components/shipping/Shipping.vue').default;
 let Vehicle = require('./components/vehicle/Vehicle.vue').default;
+let Item = require('./components/item/Item.vue').default;
 let Personal =  require('./components/Personal.vue').default;
 
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
     { path: '/vendor', component: Vendor},
     { path: '/billingaddress', component: BillingAddress},
     { path: '/shippingaddress', component: ShippingAddress},
+    { path: '/item', component: Item},
     { path: '/vehicle', component: Vehicle}
   ]
 

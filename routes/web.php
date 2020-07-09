@@ -50,3 +50,8 @@ Route::post('vehiclelist','VehicleController@vehicleList');
  ***********************/
 Route::resource('personal','PersonalController');
 Route::post('personaldetail','PersonalController@personalDetail');
+/***********************
+ Item detail
+ ***********************/
+Route::resource('item','ItemController');
+Route::post('itemlist','ItemController@itemList');
