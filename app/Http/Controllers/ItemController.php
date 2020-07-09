@@ -93,6 +93,6 @@ class ItemController extends Controller
 
     public function itemList()
     {
-        return Item::latest()->get();
+        return Item::latest()->paginate(10);
     }
 }

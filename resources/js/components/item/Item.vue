@@ -30,7 +30,7 @@
     </thead>
   
     <tbody>
-      <tr v-for="(item,key) in list" :key="item.id">
+      <tr v-for="(item,key) in list.data" :key="item.id">
         <td>{{key+1}}</td>
         <td>{{item.item_name}}</td>
         <td>{{item.rate}}</td>
@@ -42,13 +42,16 @@
     
     </tbody>
   </table>
-    
+    <pagination :data="list" @pagination-change-page="getResults"></pagination>
   </nav>
+  
  <Additem :openModal='addActive' @closeModal='closeModal'></Additem>
  <Updateitem :openModal='updateActive' @closeModal='closeModal'></Updateitem>
 </div>
 </template>
 <script>
+Vue.component('pagination', require('laravel-vue-bulma-paginator'));
+
 let Additem = require('./Additem.vue').default;
 let Updateitem = require('./Updateitem.vue').default;
 export default {
@@ -77,6 +80,12 @@ export default {
             this.updateActive = '',
             axios.post('itemlist')
              .then((response)=>console.log(this.list = response.data))
+        },
+        getResults(page=1){
+            axios.post('itemlist?page=' + page)
+				.then(response => {
+					this.list = response.data;
+				});
         }
     }
 }

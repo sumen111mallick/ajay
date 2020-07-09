@@ -2540,6 +2540,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+Vue.component('pagination', __webpack_require__(/*! laravel-vue-bulma-paginator */ "./node_modules/laravel-vue-bulma-paginator/src/laravel-vue-bulma-pagination.js"));
+
 var Additem = __webpack_require__(/*! ./Additem.vue */ "./resources/js/components/item/Additem.vue")["default"];
 
 var Updateitem = __webpack_require__(/*! ./Updateitem.vue */ "./resources/js/components/item/Updateitem.vue")["default"];
@@ -2576,6 +2579,14 @@ var Updateitem = __webpack_require__(/*! ./Updateitem.vue */ "./resources/js/com
 
       this.addActive = '', this.updateActive = '', axios.post('itemlist').then(function (response) {
         return console.log(_this2.list = response.data);
+      });
+    },
+    getResults: function getResults() {
+      var _this3 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.post('itemlist?page=' + page).then(function (response) {
+        _this3.list = response.data;
       });
     }
   }
@@ -14490,6 +14501,109 @@ if ( typeof noGlobal === "undefined" ) {
 
 return jQuery;
 } );
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-vue-bulma-paginator/src/laravel-vue-bulma-pagination.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/laravel-vue-bulma-paginator/src/laravel-vue-bulma-pagination.js ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = {
+	props: {
+		data: {
+			type: Object,
+			default: function() {
+				return {
+					current_page: 1,
+					data: [],
+					from: 1,
+					last_page: 1,
+					next_page_url: null,
+					per_page: 10,
+					prev_page_url: null,
+					to: 1,
+					total: 0,
+				}
+			}
+		},
+		limit: {
+			type: Number,
+			default: 0
+		}
+	},
+
+	template: '<div class="pagination-wrapper m-t-20"><nav class="pagination is-centered" v-if="data.total > data.per_page">\
+			<a class="pagination-previous"  v-if="data.prev_page_url" href="#" aria-label="Previous" @click.prevent="selectPage(--data.current_page)">\
+				<slot name="prev-nav">\
+					<span aria-hidden="true">&laquo;</span>\
+					<span class="sr-only">Previous</span>\
+				</slot>\
+			</a>\
+			<ul class="pagination-list">\
+				<li>\
+					<a class="pagination-link" v-for="n in getPages()" :aria-current="{ \'page\': n == data.current_page }" :class="{ \'is-current\': n == data.current_page }" href="#" @click.prevent="selectPage(n)">{{ n }}</a>\
+				</li>\
+			</ul>\
+			<a v-if="data.next_page_url" class="pagination-next" href="#" aria-label="Next" @click.prevent="selectPage(++data.current_page)" rel="next">\
+				<slot name="next-nav">\
+					<span aria-hidden="true">&raquo;</span>\
+					<span class="sr-only">Next</span>\
+				</slot>\
+			</a>\
+	</nav></div>',
+
+	methods: {
+		selectPage: function(page) {
+			if (page === '...') {
+				return;
+			}
+
+			this.$emit('pagination-change-page', page);
+		},
+		getPages: function() {
+			if (this.limit === -1) {
+				return 0;
+			}
+
+			if (this.limit === 0) {
+				return this.data.last_page;
+			}
+
+			var current = this.data.current_page,
+				last = this.data.last_page,
+				delta = this.limit,
+				left = current - delta,
+				right = current + delta + 1,
+				range = [],
+				pages = [],
+				l;
+
+			for (var i = 1; i <= last; i++) {
+				if (i == 1 || i == last || (i >= left && i < right)) {
+					range.push(i);
+				}
+			}
+
+			range.forEach(function (i) {
+				if (l) {
+					if (i - l === 2) {
+						pages.push(l + 1);
+					} else if (i - l !== 1) {
+						pages.push('...');
+					}
+				}
+				pages.push(i);
+				l = i;
+			});
+
+			return pages;
+		}
+	}
+};
 
 
 /***/ }),
@@ -36465,58 +36579,68 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("nav", { staticClass: "panel" }, [
-        _c("p", { staticClass: "panel-heading" }, [
-          _vm._v("\n      Items\n      "),
-          _c(
-            "button",
-            {
-              staticClass: "button is-link is-outlined is-pulled-right",
-              on: { click: _vm.openAddModal }
-            },
-            [_vm._v("\n        Add New Item\n      ")]
-          )
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _c("table", { staticClass: "table is-fullwidth" }, [
-          _vm._m(1),
+      _c(
+        "nav",
+        { staticClass: "panel" },
+        [
+          _c("p", { staticClass: "panel-heading" }, [
+            _vm._v("\n      Items\n      "),
+            _c(
+              "button",
+              {
+                staticClass: "button is-link is-outlined is-pulled-right",
+                on: { click: _vm.openAddModal }
+              },
+              [_vm._v("\n        Add New Item\n      ")]
+            )
+          ]),
           _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.list, function(item, key) {
-              return _c("tr", { key: item.id }, [
-                _c("td", [_vm._v(_vm._s(key + 1))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.item_name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.rate))]),
-                _vm._v(" "),
-                item.status == 1
-                  ? _c("td", [_vm._v("Yes")])
-                  : _c("td", [_vm._v("No")]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "span",
-                    {
-                      staticClass: "tag is-info",
-                      on: {
-                        click: function($event) {
-                          return _vm.openUpdate(key)
+          _vm._m(0),
+          _vm._v(" "),
+          _c("table", { staticClass: "table is-fullwidth" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.list.data, function(item, key) {
+                return _c("tr", { key: item.id }, [
+                  _c("td", [_vm._v(_vm._s(key + 1))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.item_name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.rate))]),
+                  _vm._v(" "),
+                  item.status == 1
+                    ? _c("td", [_vm._v("Yes")])
+                    : _c("td", [_vm._v("No")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "tag is-info",
+                        on: {
+                          click: function($event) {
+                            return _vm.openUpdate(key)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("Edit")]
-                  )
+                      },
+                      [_vm._v("Edit")]
+                    )
+                  ])
                 ])
-              ])
-            }),
-            0
-          )
-        ])
-      ]),
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("pagination", {
+            attrs: { data: _vm.list },
+            on: { "pagination-change-page": _vm.getResults }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("Additem", {
         attrs: { openModal: _vm.addActive },
