@@ -16,6 +16,7 @@
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <router-link to="/home" class="navbar-item">Home</router-link>
+      <router-link to="/invoice" class="navbar-item">Manage Invoice</router-link>
       <router-link to="/vendor" class="navbar-item">Manage Vendor</router-link>
       <router-link to="/billingaddress" class="navbar-item">Manage Billing Address</router-link>
       <router-link to="/shippingaddress" class="navbar-item">Manage Shipping Address</router-link>

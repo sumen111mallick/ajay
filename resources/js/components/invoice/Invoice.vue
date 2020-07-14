@@ -2,10 +2,11 @@
     <div>
     <nav class="panel">
     <p class="panel-heading">
-      Items
-      <button class="button is-link is-outlined is-pulled-right" @click="openAddModal">
-        Add New Item
-      </button>
+      Invoices
+      <router-link to="/invoice/add"><button class="button is-link is-outlined is-pulled-right">
+        Add New Invoice
+      </button></router-link>
+      
     </p>
     <div class="panel-block">
       <p class="control has-icons-left">
@@ -21,9 +22,13 @@
     <thead>
       <tr>
         <th><abbr title="Serial No.">S.No</abbr></th>
-        <th>Item</th>
-        <th>Rate</th>
-        <th>Active</th>
+        <th>Invoice No</th>
+        <th>Invoice Date</th>
+        <th>Invoice Billed To</th>
+        <th>Amount before tax</th>
+        <th>tax</th>
+        <th>Invoice Value</th>
+        <th>Payment Status</th>
         <th></th>
         
       </tr>
@@ -32,57 +37,43 @@
     <tbody>
       <tr v-for="(item,key) in list.data" :key="item.id">
         <td>{{key+1}}</td>
-        <td>{{item.item_name}}</td>
-        <td>{{item.rate}}</td>
-             
+        <td>{{item.invoice_no}}</td>
+        <td>{{item.invoice_date}}</td>
+        <td>{{item.billed_to_name}}</td>
+        <td>{{item.money_before_tax}}</td>   
+        <td>{{item.money_tax_cgst + item.money_tax_sgst + item.money_tax_igst}}</td>
+        <td>{{item.money_after_tax}}</td>
+        <td>{{item.payment_status}}</td>   
         <td v-if="item.status==1">Yes</td>
         <td v-else>No</td>
-        <td><span class="tag is-info" @click="openUpdate(key)">Edit</span></td>
+        <td><span class="tag is-info" >Edit</span></td>
       </tr>
     
     </tbody>
   </table>
     <pagination :data="list" @pagination-change-page="getResults"></pagination>
   </nav>
-  
- <Additem :openModal='addActive' @closeModal='closeModal'></Additem>
- <Updateitem :openModal='updateActive' @closeModal='closeModal'></Updateitem>
 </div>
 </template>
 <script>
 Vue.component('pagination', require('laravel-vue-bulma-paginator'));
 
-let Additem = require('./Additem.vue').default;
-let Updateitem = require('./Updateitem.vue').default;
 export default {
-    components:{Additem,Updateitem},
+    
     data(){
         return{
             list:{},
-            addActive:'',
-            updateActive:''
+            
         }
     },
     mounted(){
-        axios.post('itemlist')
+        axios.post('invoicelist')
         .then((response)=>console.log(this.list = response.data))
     },
     methods:{
-        openUpdate(key){
-            this.$children[2].list = this.list.data[key];
-            this.updateActive='is-active'
-        },
-        openAddModal(){
-            this.addActive  = 'is-active'
-        },
-        closeModal(){
-             this.addActive = '',
-            this.updateActive = '',
-            axios.post('itemlist')
-             .then((response)=>console.log(this.list = response.data))
-        },
+        
         getResults(page=1){
-            axios.post('itemlist?page=' + page)
+            axios.post('invoicelist?page=' + page)
 				.then(response => {
 					this.list = response.data;
 				});

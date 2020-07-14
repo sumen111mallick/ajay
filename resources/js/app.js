@@ -12,6 +12,8 @@ let Myheader =  require('./components/Myheader.vue').default;
 let Myfooter =  require('./components/Myfooter.vue').default;
 
 let Home =  require('./components/Home.vue').default;
+let Invoice =  require('./components/invoice/Invoice.vue').default;
+let Addinvoice =  require('./components/invoice/Addinvoice.vue').default;
 let Vendor =  require('./components/vendor/Vendor.vue').default;
 let BillingAddress =  require('./components/billing/Billing.vue').default;
 let ShippingAddress = require('./components/shipping/Shipping.vue').default;
@@ -21,6 +23,8 @@ let Personal =  require('./components/Personal.vue').default;
 
 const routes = [
     { path: '/home', component: Home },
+    { path: '/invoice', component: Invoice },
+    { path: '/invoice/add', component: Addinvoice },
     { path: '/personal', component: Personal },
     { path: '/vendor', component: Vendor},
     { path: '/billingaddress', component: BillingAddress},

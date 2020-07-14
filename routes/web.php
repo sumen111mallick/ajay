@@ -50,8 +50,26 @@ Route::post('vehiclelist','VehicleController@vehicleList');
  ***********************/
 Route::resource('personal','PersonalController');
 Route::post('personaldetail','PersonalController@personalDetail');
+
 /***********************
  Item detail
  ***********************/
 Route::resource('item','ItemController');
 Route::post('itemlist','ItemController@itemList');
+
+/***********************
+ Invoice detail
+ ***********************/
+Route::resource('invoice','InvoiceController');
+Route::post('invoicelist','InvoiceController@invoiceList');
+
+/***********************
+ Invoice Generation
+ ***********************/
+Route::post('invoicevendorlist','InvoiceController@invoiceVendorList');
+Route::post('invoicebilledlist','InvoiceController@invoiceBilledList');
+Route::post('invoiceshippedlist','InvoiceController@invoiceShippedList');
+Route::post('invoicevehiclemodelist','InvoiceController@invoiceVehicleModeList');
+Route::post('invoicevehiclelist','InvoiceController@invoiceVehicleList');
+Route::post('invoiceitemlist','InvoiceController@invoiceItemList');
+

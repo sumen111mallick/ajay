@@ -36,10 +36,7 @@ class VendorController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function vendorList()
-    {
-        return Vendor::latest()->get();
-    } 
+    
 
     public function store(VendorRequest $request)
     {
@@ -104,4 +101,9 @@ class VendorController extends Controller
     {
         //
     }
+    public function vendorList()
+    {
+        return Vendor::latest()->get();
+    } 
+   
 }
