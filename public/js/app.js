@@ -2734,9 +2734,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      mainerrors: {},
       errors: {},
       vendorList: {},
       billedToList: {},
@@ -2753,7 +2777,9 @@ __webpack_require__.r(__webpack_exports__);
       itemInputQuantity: '',
       itemInputDays: '',
       taxDropdown: '',
+      unitDays: '',
       list: {
+        invoice_date: '',
         AmountBeforeTax: 0,
         taxMode: '',
         taxIgst: 0,
@@ -2789,57 +2815,67 @@ __webpack_require__.r(__webpack_exports__);
       },
       vehicleModeList: {},
       vehicleList: {},
-      vendorCode: '',
-      invoice_date: ''
+      vendorCode: ''
     };
   },
   methods: {
-    fetchVendorList: function fetchVendorList() {
+    submitInvoice: function submitInvoice() {
       var _this = this;
 
+      axios.post('/generateinvoice', this.$data.list).then(function (response) {
+        _this.$router.push({
+          path: '/invoice'
+        });
+      })["catch"](function (error) {
+        _this.mainerrors = error.response.data.errors, console.log(error.response.data.errors);
+      });
+    },
+    fetchVendorList: function fetchVendorList() {
+      var _this2 = this;
+
       axios.post('/invoicevendorlist').then(function (response) {
-        _this.vendorList = response.data;
+        _this2.vendorList = response.data;
       });
     },
     fetchBilledTo: function fetchBilledTo(val) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post('/invoicebilledlist', {
         vendorcode: val
       }).then(function (response) {
-        return _this2.billedToList = response.data;
+        return _this3.billedToList = response.data;
       });
     },
     fetchShippedTo: function fetchShippedTo(val) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/invoiceshippedlist', {
         vendorcode: val
       }).then(function (response) {
-        return _this3.shippedToList = response.data;
+        return _this4.shippedToList = response.data;
       });
     },
     fetchTransportationMode: function fetchTransportationMode() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post('/invoicevehiclemodelist').then(function (response) {
-        return _this4.vehicleModeList = response.data;
+        return _this5.vehicleModeList = response.data;
       });
     },
     fetchVehicleNo: function fetchVehicleNo(val) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post('/invoicevehiclelist', {
         vehicleMode: val
       }).then(function (response) {
-        return _this5.vehicleList = response.data;
+        return _this6.vehicleList = response.data;
       });
     },
     itemsList: function itemsList() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.post('/invoiceitemlist').then(function (response) {
-        return _this6.itemList = response.data;
+        return _this7.itemList = response.data;
       });
     },
     generateNewRow: function generateNewRow(InputId, InputName, InputDescription, InputJobNo, InputRate, InputQuantity, InputDays) {
@@ -2857,7 +2893,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.itemInputId && this.itemInputName && this.itemInputDescription && this.itemInputJobNo && this.itemInputRate && this.itemInputQuantity && this.itemInputDays) {
         var productSelected = this.generateNewRow(this.itemInputId, this.itemInputName, this.itemInputDescription, this.itemInputJobNo, this.itemInputRate, this.itemInputQuantity, this.itemInputDays);
         this.list.invoiceItem.push(productSelected);
-        this.itemInputDescription = '', this.itemInputJobNo = '', this.itemInputQuantity = '', this.itemInputDays = '', this.errors = {}, this.calculate();
+        this.itemInputDescription = '', this.itemInputQuantity = '', this.itemInputDays = '', this.errors = {}, this.calculate();
       } else {
         this.errors = ["incomplete form"];
       }
@@ -2867,9 +2903,17 @@ __webpack_require__.r(__webpack_exports__);
     },
     calculate: function calculate() {
       var price = 0;
-      this.list.invoiceItem.forEach(function (item) {
-        price += item.itemRate * item.itemQuantity * item.itemDays;
-      });
+
+      if (this.unitDays == 'days') {
+        this.list.invoiceItem.forEach(function (item) {
+          price += item.itemRate * item.itemQuantity * item.itemDays;
+        });
+      } else {
+        this.list.invoiceItem.forEach(function (item) {
+          price += item.itemRate * item.itemQuantity;
+        });
+      }
+
       this.list.AmountBeforeTax = price;
 
       if (this.taxDropdown == 'IGST') {
@@ -2930,6 +2974,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     taxDropdown: function taxDropdown(val) {
       this.calculate();
+    },
+    unitDays: function unitDays(val) {
+      this.list.invoiceItem = [];
     }
   }
 });
@@ -2945,6 +2992,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -37037,6 +37085,20 @@ var render = function() {
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
+      _c("div", { staticClass: "column" }, [
+        _vm.mainerrors
+          ? _c("p", { staticClass: "has-text-danger" }, [
+              _c(
+                "ul",
+                _vm._l(_vm.mainerrors, function(error) {
+                  return _c("li", { key: error }, [_vm._v(_vm._s(error))])
+                }),
+                0
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
       _c("div", { staticClass: "columns" }, [
         _c("div", { staticClass: "column" }, [
           _c("div", { staticClass: "field" }, [
@@ -37136,19 +37198,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.invoice_date,
-                    expression: "invoice_date"
+                    value: _vm.list.invoice_date,
+                    expression: "list.invoice_date"
                   }
                 ],
                 staticClass: "input",
                 attrs: { type: "date" },
-                domProps: { value: _vm.invoice_date },
+                domProps: { value: _vm.list.invoice_date },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.invoice_date = $event.target.value
+                    _vm.$set(_vm.list, "invoice_date", $event.target.value)
                   }
                 }
               })
@@ -37936,11 +37998,17 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.itemRate))]),
                   _vm._v(" "),
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(item.itemRate * item.itemQuantity * item.itemDays)
-                    )
-                  ]),
+                  item.itemDays == "days"
+                    ? _c("td", [
+                        _vm._v(
+                          _vm._s(
+                            item.itemRate * item.itemQuantity * item.itemDays
+                          )
+                        )
+                      ])
+                    : _c("td", [
+                        _vm._v(_vm._s(item.itemRate * item.itemQuantity))
+                      ]),
                   _vm._v(" "),
                   _c("td", [
                     _c(
@@ -38009,6 +38077,48 @@ var render = function() {
               _vm._v(
                 "\n                        Choose Items\n                    "
               )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "panel-block" }, [
+              _c("div", { staticClass: "select is-fullwidth" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.unitDays,
+                        expression: "unitDays"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.unitDays = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", [_vm._v("Select dropdown")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "unit" } }, [
+                      _vm._v("Unit")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "days" } }, [_vm._v("Days")])
+                  ]
+                )
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "panel-block" }, [
@@ -38271,7 +38381,7 @@ var render = function() {
             _c("div", { staticClass: "panel-block" }, [
               _c("div", { staticClass: "control" }, [
                 _vm._v(
-                  "\n                                Days\n                                "
+                  "\n                                Unit/Days\n                                "
                 ),
                 _c("input", {
                   directives: [
@@ -38283,7 +38393,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "input",
-                  attrs: { type: "text", placeholder: "Days" },
+                  attrs: { type: "text", placeholder: "Unit/Days" },
                   domProps: { value: _vm.itemInputDays },
                   on: {
                     input: function($event) {
@@ -38310,6 +38420,16 @@ var render = function() {
               ])
             ])
           ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column" }, [
+        _c("div", { staticClass: "control" }, [
+          _c(
+            "button",
+            { staticClass: "button is-link", on: { click: _vm.submitInvoice } },
+            [_vm._v("Submit Invoice")]
+          )
         ])
       ])
     ])
@@ -38416,11 +38536,9 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(item.money_after_tax))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.payment_status))]),
-                _vm._v(" "),
-                item.status == 1
-                  ? _c("td", [_vm._v("Yes")])
-                  : _c("td", [_vm._v("No")]),
+                item.payment_status == 1
+                  ? _c("td", [_vm._v("Paid")])
+                  : _c("td", [_vm._v("Unpaid")]),
                 _vm._v(" "),
                 _vm._m(2, true)
               ])

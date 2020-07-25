@@ -72,4 +72,8 @@ Route::post('invoiceshippedlist','InvoiceController@invoiceShippedList');
 Route::post('invoicevehiclemodelist','InvoiceController@invoiceVehicleModeList');
 Route::post('invoicevehiclelist','InvoiceController@invoiceVehicleList');
 Route::post('invoiceitemlist','InvoiceController@invoiceItemList');
+Route::post('generateinvoice','InvoiceController@generateInvoice');
+
+
+
 

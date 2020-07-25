@@ -43,9 +43,10 @@
         <td>{{item.money_before_tax}}</td>   
         <td>{{item.money_tax_cgst + item.money_tax_sgst + item.money_tax_igst}}</td>
         <td>{{item.money_after_tax}}</td>
-        <td>{{item.payment_status}}</td>   
-        <td v-if="item.status==1">Yes</td>
-        <td v-else>No</td>
+        
+        <td v-if="item.payment_status==1">Paid</td>
+        <td v-else>Unpaid</td>   
+        
         <td><span class="tag is-info" >Edit</span></td>
       </tr>
     

@@ -7,7 +7,13 @@
             </p>
             
             <br>
-            
+            <div class="column">
+                <p v-if="mainerrors" class="has-text-danger">
+                                <ul>
+                                <li v-for="error in mainerrors" :key="error">{{ error }}</li>
+                                </ul>
+                            </p>
+            </div>
             <div class="columns">
                 <div class="column">
                    <div class="field">
@@ -30,7 +36,7 @@
                     <div class="field">
                         <label class="label">Invoice Date</label>
                         <div class="control">
-                            <input class="input" type="date" v-model="invoice_date">
+                            <input class="input" type="date" v-model="list.invoice_date">
                         </div>
                     </div>
                 </div>  
@@ -209,7 +215,8 @@
                             <td>{{item.itemQuantity}}</td>
                             <td>{{item.itemDays}}</td>
                             <td>{{item.itemRate}}</td>
-                            <td>{{item.itemRate * item.itemQuantity * item.itemDays}}</td>
+                            <td v-if="item.itemDays=='days'">{{item.itemRate * item.itemQuantity * item.itemDays}}</td>
+                            <td v-else>{{item.itemRate * item.itemQuantity}}</td>
                             <td><span class="tag is-danger" @click="deleteFromInvoiceItemList(index)">Delete</span></td>
                         </tr>
                     </tbody>
@@ -249,6 +256,17 @@
                         <p class="panel-heading">
                             Choose Items
                         </p>
+                        <div class="panel-block">
+                            
+                            <div class="select is-fullwidth">
+                                <select v-model="unitDays">
+                                <option>Select dropdown</option>
+                                <option value="unit">Unit</option>
+                                <option value="days">Days</option>
+                                </select>
+                            </div>
+                            
+                        </div>
                         <div class="panel-block">
                             
                             <div class="select is-fullwidth">
@@ -308,8 +326,8 @@
                         </div>
                         <div class="panel-block">                           
                                 <div class="control">
-                                    Days
-                                    <input class="input"  type="text" placeholder="Days" v-model="itemInputDays" >
+                                    Unit/Days
+                                    <input class="input"  type="text" placeholder="Unit/Days" v-model="itemInputDays" >
                                 </div>                                  
                         </div>
                         <div class="panel-block">                           
@@ -322,6 +340,11 @@
                 </div>
                 
             </div>
+             <div class="column">
+                <div class="control">
+                 <button class="button is-link" @click="submitInvoice">Submit Invoice</button>
+                </div>
+            </div>
         </nav>
     </div>
 </template>
@@ -330,6 +353,7 @@
 export default {
     data(){
         return{
+            mainerrors:{},
             errors:{},
             vendorList:{},
             billedToList:{},
@@ -346,7 +370,9 @@ export default {
             itemInputQuantity:'',
             itemInputDays:'',
             taxDropdown:'',
+            unitDays:'',
             list:{
+                invoice_date:'',
                 AmountBeforeTax:0,
                 taxMode:'',
                 taxIgst:0,
@@ -387,11 +413,19 @@ export default {
 
 
             vendorCode:'',
-            invoice_date:''
+           
             
         }
     },
     methods:{
+        submitInvoice(){
+            axios.post('/generateinvoice',this.$data.list)
+            .then((response)=>{
+                this.$router.push({path: '/invoice'})
+            })
+            .catch((error)=>{this.mainerrors = error.response.data.errors,
+            console.log(error.response.data.errors)})
+        },
         fetchVendorList(){
             axios.post('/invoicevendorlist')
             .then((response)=>{this.vendorList = response.data
@@ -435,7 +469,7 @@ export default {
             var productSelected = this.generateNewRow(this.itemInputId,this.itemInputName,this.itemInputDescription,this.itemInputJobNo,this.itemInputRate,this.itemInputQuantity,this.itemInputDays);
             this.list.invoiceItem.push(productSelected);
             this.itemInputDescription='',
-            this.itemInputJobNo='',
+            
             
             this.itemInputQuantity='',
             this.itemInputDays='',
@@ -453,9 +487,15 @@ export default {
         },
         calculate(){
             var price = 0;
+            if(this.unitDays == 'days'){
             this.list.invoiceItem.forEach(function(item){
                 price +=item.itemRate *item.itemQuantity *item.itemDays
-            })
+            })}
+            else{
+               this.list.invoiceItem.forEach(function(item){
+                price +=item.itemRate *item.itemQuantity
+            }) 
+            }
             this.list.AmountBeforeTax = price;
             if(this.taxDropdown == 'IGST'){
                 this.list.taxMode = 'IGST',
@@ -531,7 +571,10 @@ export default {
         },
         taxDropdown: function(val){
             this.calculate()
-        }  
+        },
+        unitDays:function(val){
+            this.list.invoiceItem=[]
+        } 
 
     }
 }
