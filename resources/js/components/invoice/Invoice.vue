@@ -47,7 +47,7 @@
         <td v-if="item.payment_status==1">Paid</td>
         <td v-else>Unpaid</td>   
         
-        <td><span class="tag is-info" >Edit</span></td>
+        <td><router-link :to="{ path: '/invoice/view', params: { userId: item.invoice_no }}"><span class="tag is-success" >view</span></router-link>  <span class="tag is-info" >Edit</span></td>
       </tr>
     
     </tbody>
